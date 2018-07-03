@@ -1,0 +1,4 @@
+#Make these for your environment
+sdk.dir=
+flutter.sdk=
+flutter.buildMode=debug
