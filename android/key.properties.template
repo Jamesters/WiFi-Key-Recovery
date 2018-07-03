@@ -1,0 +1,5 @@
+#Make these for your key
+storePassword=
+keyPassword=
+keyAlias=key
+storeFile=
