@@ -193,12 +193,7 @@ class NetworkListPageState extends State<NetworkListPage> {
                 currentItem = (_scrollController.offset / _scrollController.position.maxScrollExtent * (tmpList.length - 1 )).floor();
               }
             }
-            int y;
-            y = 1;
-            y=2;
             scrollLetter = (tmpList[currentItem] as NetworkListItem).wifi.ssid.substring(0,1).toUpperCase();
-            int x;
-            x = 1;
             return Text(scrollLetter);
           },
           child: new ListView.builder(
