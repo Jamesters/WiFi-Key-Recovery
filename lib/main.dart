@@ -176,6 +176,8 @@ class NetworkListPageState extends State<NetworkListPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> tmpList = _networkList.where((l) => l.key.toString().toUpperCase().contains(_searchText.toUpperCase())).toList();
+    String scrollLetter = "";
+    int currentItem = 0;
 
        return new Scaffold(
         key: _scaffoldKey,
@@ -184,13 +186,20 @@ class NetworkListPageState extends State<NetworkListPage> {
           backgroundColor: Colors.cyanAccent,
           controller: _scrollController,
           labelTextBuilder: (offset) {
-           final int currentItem = _scrollController.hasClients
-            ? (_scrollController.offset /
-            _scrollController.position.maxScrollExtent *
-            (tmpList.length - 1 ))
-            .floor()
-            : 0;
-            return Text((tmpList[currentItem] as NetworkListItem).wifi.ssid.substring(0,1).toUpperCase() );
+            if (_scrollController.hasClients){
+              if ((_scrollController.position.maxScrollExtent *  (tmpList.length - 1 )) == 0 ) {
+                currentItem = 0;
+              }else {
+                currentItem = (_scrollController.offset / _scrollController.position.maxScrollExtent * (tmpList.length - 1 )).floor();
+              }
+            }
+            int y;
+            y = 1;
+            y=2;
+            scrollLetter = (tmpList[currentItem] as NetworkListItem).wifi.ssid.substring(0,1).toUpperCase();
+            int x;
+            x = 1;
+            return Text(scrollLetter);
           },
           child: new ListView.builder(
             itemCount: tmpList.length,
