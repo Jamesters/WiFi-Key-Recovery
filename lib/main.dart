@@ -137,16 +137,20 @@ class NetworkListPageState extends State<NetworkListPage> {
     // Fall back to 0 if the SSID is not found - bump to the top of the list
     int scrollIndex = 0;
     // Go through the children and compare the keys to find the index number of this SSID
-    for (int i = 0; i < _networkList.length - 1;i++){
-      if ((_networkList[i] as NetworkListItem).wifi.ssid == ssid){
-        scrollIndex = i;
-        break;
+    if (_networkList[0].runtimeType == NetworkListItem){
+      for (int i = 0; i < _networkList.length - 1;i++){
+        if ((_networkList[i] as NetworkListItem).wifi.ssid == ssid){
+          scrollIndex = i;
+          break;
+        }
       }
     }
     // Get total size of scrollable list
     double totalSize = _scrollController.position.extentAfter + _scrollController.position.extentBefore + _scrollController.position.extentInside;
     // Get the size (height) of each tile - they should all be the same.
-    double tileSize = totalSize / _networkList.length;
+    double tileSize = 1.0;
+    if (_networkList.length > 0)
+       tileSize = totalSize / _networkList.length;
     // Ffind the position inside the total size to which we want to scroll
     double scrollTo =  tileSize * scrollIndex;
     // If we're trying to scroll outside the list, just scroll to maxScrollExtent
@@ -176,6 +180,9 @@ class NetworkListPageState extends State<NetworkListPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> tmpList = _networkList.where((l) => l.key.toString().toUpperCase().contains(_searchText.toUpperCase())).toList();
+    if (tmpList.length == 0){
+      tmpList =  [ new Text("No Matches Found", textScaleFactor: 2.0,)];
+    }
     String scrollLetter = "";
     int currentItem = 0;
 
@@ -193,7 +200,12 @@ class NetworkListPageState extends State<NetworkListPage> {
                 currentItem = (_scrollController.offset / _scrollController.position.maxScrollExtent * (tmpList.length - 1 )).floor();
               }
             }
-            scrollLetter = (tmpList[currentItem] as NetworkListItem).wifi.ssid.substring(0,1).toUpperCase();
+            if (tmpList[currentItem].runtimeType == NetworkListItem){
+              scrollLetter = (tmpList[currentItem] as NetworkListItem).wifi.ssid.substring(0,1).toUpperCase();
+            }else {
+              scrollLetter = "";
+            }
+            
             return Text(scrollLetter);
           },
           child: new ListView.builder(
